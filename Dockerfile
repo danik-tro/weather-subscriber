@@ -33,6 +33,8 @@ USER appuser
 
 COPY --from=build /bin/server /bin/
 COPY docs/swagger.json docs/
+COPY .docker.env .env
+COPY templates/ templates/
 
 EXPOSE 8000
 ENTRYPOINT [ "/bin/server" ]
