@@ -31,8 +31,8 @@ type Config struct {
 	BaseURL    string `mapstructure:"BASE_URL"`
 	SwaggerURL string `mapstructure:"SWAGGER_URL"`
 
-	APP_Host string `mapstructure:"APP_HOST"`
-	APP_Port int    `mapstructure:"APP_PORT"`
+	AppHost string `mapstructure:"APP_HOST"`
+	AppPort int    `mapstructure:"APP_PORT"`
 }
 
 func (c *Config) GetDSN() string {

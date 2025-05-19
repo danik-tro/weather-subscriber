@@ -126,7 +126,7 @@ func main() {
 	publisher.Start()
 	defer publisher.Close()
 
-	if err := router.Run(fmt.Sprintf("%s:%d", config.APP_Host, config.APP_Port)); err != nil {
+	if err := router.Run(fmt.Sprintf("%s:%d", config.AppHost, config.AppPort)); err != nil {
 		log.Fatal(err)
 	}
 }
