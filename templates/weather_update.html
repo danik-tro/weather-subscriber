@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Weather Update</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .weather-info {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .temperature {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .description {
+            font-size: 18px;
+            color: #34495e;
+            margin: 10px 0;
+        }
+        .humidity {
+            color: #7f8c8d;
+        }
+        .unsubscribe {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .unsubscribe a {
+            color: #95a5a6;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Daily Weather Update for {{.City}}</h1>
+    
+    <div class="weather-info">
+        <div class="temperature">{{.Temperature}}°C</div>
+        <div class="description">{{.Description}}</div>
+        <div class="humidity">Humidity: {{.Humidity}}%</div>
+    </div>
+
+    <div class="unsubscribe">
+        To unsubscribe from these updates, <a href="{{.UnsubscribeURL}}">click here</a>.
+    </div>
+</body>
+</html>
