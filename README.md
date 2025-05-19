@@ -45,6 +45,7 @@ For the backend architecture, the onion architecture pattern was chosen, utilizi
 
 ## Configuration
 
+### Local Development
 Create a `.env` file in the project root with the following variables:
 
 ```env
@@ -76,6 +77,49 @@ SMTP_FROM=your_from_email
 BASE_URL=http://localhost:8080
 ```
 
+### Docker Environment
+For Docker deployment, create a `.docker.env` file with the following configuration:
+
+```env
+# Database configuration
+DB_HOST=postgres
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=weather_app
+DB_SSL_MODE=disable
+DB_AUTO_MIGRATE=true
+
+# Redis configuration
+REDIS_ADDRESS=redis:6379
+REDIS_PASSWORD=
+REDIS_DB=0
+
+# Weather API configuration
+WEATHER_API_KEY=your_api_key
+
+# SMTP configuration
+SMTP_HOST=your_smtp_host
+SMTP_PORT=587
+SMTP_USERNAME=your_smtp_username
+SMTP_PASSWORD=your_smtp_password
+SMTP_FROM=your_from_email
+
+# Base URL (use the service name from docker-compose)
+BASE_URL=http://app:8080
+
+# Application configuration
+APP_HOST=0.0.0.0
+APP_PORT=8080
+```
+
+Key differences in Docker environment:
+- Database host is set to `postgres` (service name in docker-compose)
+- Redis host is set to `redis` (service name in docker-compose)
+- Base URL uses the service name `app` instead of localhost
+- Application host is set to `0.0.0.0` to allow external connections
+- Database and Redis credentials are simplified for development
+
 ## API Endpoints
 
 ### Subscribe to Weather Updates
@@ -97,6 +141,17 @@ GET /api/weather?city=London
 
 ### Confirm Subscription
 ```http
+POST /api/confirm/{confirmation_token}
+```
+
+### Unsubscribe
+```http
+POST /api/unsubscribe/{unsubscribe_token}
+```
+
+HTML pages
+### Confirm Subscription
+```http
 GET /confirm/{confirmation_token}
 ```
 
@@ -107,9 +162,10 @@ GET /unsubscribe/{unsubscribe_token}
 
 ## Running the Service
 
+### Local Development
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/weather-subscriber.git
+git clone https://github.com/danik-tro/weather-subscriber.git
 cd weather-subscriber
 ```
 
@@ -120,13 +176,14 @@ go mod download
 
 3. Run the service:
 ```bash
-go run cmd/main.go
+go run main.go
 ```
 
-## Docker Support
-
+### Docker Deployment
 The project includes Docker Compose configuration for easy deployment:
 
+1. Create the `.docker.env` file as described above
+2. Build and start the services:
 ```bash
 docker-compose up -d
 ```
@@ -135,6 +192,16 @@ This will start:
 - The main application
 - PostgreSQL database
 - Redis cache
+
+To view logs:
+```bash
+docker-compose logs -f
+```
+
+To stop the services:
+```bash
+docker-compose down
+```
 
 ## Project Structure
 
@@ -153,7 +220,10 @@ This will start:
 │   │   └── weather/     # Weather API client
 │   └── presenter/       # API handlers and routes
 ├── templates/           # Email templates
-├── .env                # Environment configuration
+├── .env                # Environment configuration for local development
+├── .docker.env         # Environment configuration for Docker
+├── compose.yaml        # Docker Compose configuration
+└── README.md          # This file
 ```
 
 ## License
