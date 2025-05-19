@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	config "github.com/danik-tro/weather-subscriber/pkg"
@@ -14,6 +15,8 @@ import (
 	events "github.com/danik-tro/weather-subscriber/pkg/infrastructure/events"
 	"github.com/danik-tro/weather-subscriber/pkg/infrastructure/usecases"
 	"github.com/danik-tro/weather-subscriber/pkg/presenter/http"
+
+	_ "github.com/danik-tro/weather-subscriber/docs"
 )
 
 const (
@@ -22,6 +25,18 @@ const (
 	redisPrefix = "weather_app"
 )
 
+// @title			Weather Service
+// @version		1.0
+// @description	Weather Service
+// @termsOfService	http://swagger.io/terms/
+// @contact.name	API Support
+// @contact.url	http://www.swagger.io/support
+// @contact.email	support@swagger.io
+// @license.name	Apache 2.0
+// @license.url	http://www.apache.org/licenses/LICENSE-2.0.html
+// @host			localhost:8080
+// @BasePath		/api
+// @schemes		http https
 func main() {
 	config, err := config.LoadConfig(".")
 	if err != nil {
@@ -59,7 +74,7 @@ func main() {
 	unsubscribeUC := usecases.NewUnsubscribeUseCase(repository)
 	checkTokensUC := usecases.NewCheckTokens(repository)
 
-	router := http.NewRouter(subscribeUC, getWeatherUC, confirmUC, unsubscribeUC, checkTokensUC)
+	router := http.NewRouter(*config, subscribeUC, getWeatherUC, confirmUC, unsubscribeUC, checkTokensUC)
 
 	smtpConfig := smtp.SMTPConfig{
 		Host:     config.SMTPHost,
@@ -111,7 +126,7 @@ func main() {
 	publisher.Start()
 	defer publisher.Close()
 
-	if err := router.Run(":8080"); err != nil {
+	if err := router.Run(fmt.Sprintf("%s:%d", config.APP_Host, config.APP_Port)); err != nil {
 		log.Fatal(err)
 	}
 }

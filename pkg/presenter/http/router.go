@@ -1,14 +1,21 @@
 package http
 
 import (
+	config "github.com/danik-tro/weather-subscriber/pkg"
 	usecase "github.com/danik-tro/weather-subscriber/pkg/domain/usecases"
 	handlers "github.com/danik-tro/weather-subscriber/pkg/presenter/http/handlers"
 	"github.com/gin-gonic/gin"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func NewRouter(subscribeUC usecase.SubscribeWeatherUseCase, getWeatherUC usecase.GetWeatherUseCase, confirmUC usecase.ConfirmSubscriptionUseCase, unsubscribeUC usecase.UnsubscribeUseCase, checkTokensUC usecase.CheckTokensUseCase) *gin.Engine {
+func NewRouter(config config.Config, subscribeUC usecase.SubscribeWeatherUseCase, getWeatherUC usecase.GetWeatherUseCase, confirmUC usecase.ConfirmSubscriptionUseCase, unsubscribeUC usecase.UnsubscribeUseCase, checkTokensUC usecase.CheckTokensUseCase) *gin.Engine {
 	router := gin.Default()
 	router.LoadHTMLGlob("templates/*")
+
+	url := ginSwagger.URL(config.SwaggerURL)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	api := router.Group("/api")
 	{

@@ -2,6 +2,7 @@ package weather
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	domain "github.com/danik-tro/weather-subscriber/pkg/domain/value_object"
@@ -31,6 +32,8 @@ func NewWeatherService(weatherClient WeatherClient, cache WeatherCache) *Weather
 }
 
 func (s *WeatherService) GetWeather(ctx context.Context, city string) (*domain.Weather, error) {
+	city = normalizeCityName(city)
+
 	weather, err := s.cache.GetWeather(ctx, city)
 	if err != nil {
 		return nil, err
@@ -57,4 +60,8 @@ func (s *WeatherService) GetWeather(ctx context.Context, city string) (*domain.W
 	}
 
 	return weather, nil
+}
+
+func normalizeCityName(city string) string {
+	return strings.ToTitle(city)
 }

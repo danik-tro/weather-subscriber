@@ -134,9 +134,8 @@ func (r *GormRepository) Confirm(ctx context.Context, confirmationToken string) 
 	result := tx.Model(&SubscriptionModel{}).
 		Where("confirmation_token = ?", confirmationToken).
 		Updates(map[string]interface{}{
-			"confirmed":          true,
-			"confirmed_at":       now,
-			"confirmation_token": "",
+			"confirmed":    true,
+			"confirmed_at": now,
 		})
 
 	if result.Error != nil {

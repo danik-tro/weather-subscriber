@@ -9,6 +9,16 @@ import (
 	"github.com/google/uuid"
 )
 
+// @Summary Confirm subscription
+// @Description Confirm subscription using token
+// @Tags subscription
+// @Accept json
+// @Produce json
+// @Param token path string true "Confirmation token"
+// @Success 200 {object} map[string]string "Subscription confirmed"
+// @Failure 400 {object} map[string]string "Invalid token format or missing token"
+// @Failure 404 {object} map[string]string "Subscription not found"
+// @Router /confirm/{token} [post]
 func ConfirmHandler(uc usecase.ConfirmSubscriptionUseCase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Param("token")

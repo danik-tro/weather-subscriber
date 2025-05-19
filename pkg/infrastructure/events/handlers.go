@@ -123,7 +123,7 @@ func (h *Handler) FetchAndUpdateWeatherSubscribers(frequency entity.Frequency) d
 				Temperature:    weather.Temperature,
 				Humidity:       weather.Humidity,
 				Description:    weather.Description,
-				UnsubscribeURL: fmt.Sprintf("http://localhost:8080/unsubscribe/%s", subscription.UnsubscribeToken),
+				UnsubscribeURL: fmt.Sprintf("%s/unsubscribe/%s", h.Config.BaseURL, subscription.UnsubscribeToken),
 			}
 
 			weatherTmpl, err := template.ParseFiles("templates/weather_update.html")

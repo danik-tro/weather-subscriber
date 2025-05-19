@@ -2,6 +2,15 @@
 
 A Go-based service that allows users to subscribe to weather updates for their preferred cities. The service sends weather updates via email at configurable intervals (hourly or daily).
 
+## Approach
+Due to limited time, it was decided to use a cron job and a custom event publisher abstraction instead of implementing RabbitMQ or other queues and background task managers at this stage. The cron job is triggered either hourly or daily to send weather updates to users.
+
+To avoid hitting the external API unnecessarily, a caching mechanism was introduced. If multiple users subscribe to the same city, the weather data is fetched from the cache instead of making repeated API calls. This significantly optimizes performance.
+
+The confirmation email for the subscription is sent asynchronously. In the current implementation, a simple custom publisher-subscriber model with worker routines was built. In a production environment, this setup could be extended with dedicated brokers and workers to handle larger volumes of data more efficiently.
+
+For the backend architecture, the onion architecture pattern was chosen, utilizing use cases instead of service classes. This approach enabled the creation of single-purpose functions that perform exactly one operation at the handler level. Everything is abstracted to facilitate testing and to allow for easy replacement of implementations.
+
 ## Features
 
 - **Weather Subscriptions**

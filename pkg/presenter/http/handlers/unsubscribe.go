@@ -9,6 +9,16 @@ import (
 	"github.com/google/uuid"
 )
 
+// @Summary Unsubscribe from weather updates
+// @Description Unsubscribe from weather updates using token
+// @Tags subscription
+// @Accept json
+// @Produce json
+// @Param token path string true "Unsubscribe token"
+// @Success 200 {object} map[string]string "Subscription unsubscribed"
+// @Failure 400 {object} map[string]string "Invalid token format or missing token"
+// @Failure 404 {object} map[string]string "Subscription not found"
+// @Router /unsubscribe/{token} [post]
 func UnsubscribeHandler(uc usecase.UnsubscribeUseCase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Param("token")

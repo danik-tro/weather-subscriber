@@ -1,0 +1,190 @@
+basePath: /api
+definitions:
+  domain.Weather:
+    properties:
+      description:
+        type: string
+      humidity:
+        type: number
+      temperature:
+        type: number
+    type: object
+  http.SubscribeRequest:
+    properties:
+      city:
+        type: string
+      email:
+        type: string
+      frequency:
+        enum:
+        - hourly
+        - daily
+        type: string
+    required:
+    - city
+    - email
+    - frequency
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Weather Service
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Weather Service
+  version: "1.0"
+paths:
+  /confirm/{token}:
+    post:
+      consumes:
+      - application/json
+      description: Confirm subscription using token
+      parameters:
+      - description: Confirmation token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Subscription confirmed
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid token format or missing token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Subscription not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Confirm subscription
+      tags:
+      - subscription
+  /subscribe:
+    post:
+      consumes:
+      - application/json
+      description: Subscribe to weather updates for a specific city and frequency
+      parameters:
+      - description: Subscription request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/http.SubscribeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Subscription created and confirmation email sent
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid request or validation errors
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: City not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Subscription already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Subscribe to weather updates
+      tags:
+      - subscription
+  /unsubscribe/{token}:
+    post:
+      consumes:
+      - application/json
+      description: Unsubscribe from weather updates using token
+      parameters:
+      - description: Unsubscribe token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Subscription unsubscribed
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid token format or missing token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Subscription not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Unsubscribe from weather updates
+      tags:
+      - subscription
+  /weather:
+    get:
+      consumes:
+      - application/json
+      description: Get current weather information for a specific city
+      parameters:
+      - description: City name
+        in: query
+        name: city
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Weather information
+          schema:
+            $ref: '#/definitions/domain.Weather'
+        "400":
+          description: Invalid request or missing city parameter
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: City not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get weather by city
+      tags:
+      - weather
+schemes:
+- http
+- https
+swagger: "2.0"

@@ -28,7 +28,11 @@ type Config struct {
 	SMTPPassword string `mapstructure:"SMTP_PASSWORD"`
 	SMTPFrom     string `mapstructure:"SMTP_FROM"`
 
-	BaseURL string `mapstructure:"BASE_URL"`
+	BaseURL    string `mapstructure:"BASE_URL"`
+	SwaggerURL string `mapstructure:"SWAGGER_URL"`
+
+	APP_Host string `mapstructure:"HOST"`
+	APP_Port int    `mapstructure:"PORT"`
 }
 
 func (c *Config) GetDSN() string {
@@ -53,6 +57,10 @@ func LoadConfig(configPath string) (*Config, error) {
 	v.SetDefault("REDIS_DB", 0)
 
 	v.SetDefault("BASE_URL", "http://localhost:8080")
+	v.SetDefault("SWAGGER_URL", "http://localhost:8080/swagger/doc.json")
+
+	v.SetDefault("APP_HOST", "localhost")
+	v.SetDefault("APP_PORT", 8080)
 
 	if configPath != "" {
 		v.AddConfigPath(configPath)

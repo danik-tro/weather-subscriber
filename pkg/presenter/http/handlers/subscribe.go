@@ -20,6 +20,17 @@ type SubscribeRequest struct {
 	Frequency string `form:"frequency" json:"frequency" binding:"required,oneof=hourly daily"`
 }
 
+// @Summary Subscribe to weather updates
+// @Description Subscribe to weather updates for a specific city and frequency
+// @Tags subscription
+// @Accept json
+// @Produce json
+// @Param request body SubscribeRequest true "Subscription request"
+// @Success 200 {object} map[string]string "Subscription created and confirmation email sent"
+// @Failure 400 {object} map[string]string "Invalid request or validation errors"
+// @Failure 404 {object} map[string]string "City not found"
+// @Failure 409 {object} map[string]string "Subscription already exists"
+// @Router /subscribe [post]
 func SubscribeHandler(uc usecase.SubscribeWeatherUseCase) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var req SubscribeRequest
@@ -53,6 +64,6 @@ func SubscribeHandler(uc usecase.SubscribeWeatherUseCase) gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusCreated, gin.H{"message": "subscription created, confirmation email sent"})
+		c.JSON(http.StatusOK, gin.H{"message": "subscription created, confirmation email sent"})
 	}
 }
