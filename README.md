@@ -1,4 +1,5 @@
 # Weather Subscription Service
+[![codecov](https://codecov.io/github/danik-tro/weather-subscriber/branch/master/graph/badge.svg?token=VHrmK2NoIP)](https://codecov.io/github/danik-tro/weather-subscriber)
 
 A Go-based service that allows users to subscribe to weather updates for their preferred cities. The service sends weather updates via email at configurable intervals (hourly or daily).
 
